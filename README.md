@@ -67,7 +67,6 @@ crud_basics/\
 - `execute()` - Runs the prepared statement with the bound parameters
 
 ## Transaction Functions
-<<<<<<< HEAD
 - `mysqli_autocommit(false)` - Turns off auto-commit mode to start a transaction
 - `mysqli_commit()` - Saves all changes made during the transaction permanently
 - `mysqli_rollback()` - Undoes all changes made during the transaction if errors occur
@@ -86,8 +85,3 @@ crud_basics/\
 - **XSS Prevention**: htmlspecialchars() when outputting user data
 - **Input Validation**: preg_match() and filter_var() for data format checking
 - **Data Sanitization**: Custom sanitize_input() function for cleaning user input
-=======
-- `mysqli_autocommit()` - Controls transaction behavior
-- `mysqli_commit()` - Saves changes permanently
-- `mysqli_rollback()` - Undoes changes on error
->>>>>>> 5dd97a40bd03cd1636878418e1382e77c56dfbac
