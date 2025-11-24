@@ -9,7 +9,8 @@ $name = $email = $phone = "";
 $error = ''; // general errors
 $user = null;
 
-// get user ID from URL
+// get userID from URL (primary key)
+// fetches user data
 if (isset($_GET['id'])) {
     $id = mysqli_real_escape_string($conn, $_GET['id']);
     
@@ -44,7 +45,7 @@ if (isset($_GET['id'])) {
         - FILTER_VALIDATE_INT - Validates integer
 */
 
-// handle form submission
+// checks if a form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = mysqli_real_escape_string($conn, $_POST['id']);
     
@@ -78,17 +79,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     // if no errors in required fields, proceed with database operation
     if (empty($nameErr) && empty($emailErr) && empty($phoneErr)) {
-        // use prepared statement (prevents sql injection)
-        $stmt = $conn->prepare("UPDATE users SET name=?, email=?, phone=? WHERE id=?");
-        $stmt->bind_param("sssi", $name, $email, $phone, $id);
-        
-        if ($stmt->execute()) {
-            header("Location: index.php?msg=User updated successfully!");
-            exit();
-        } else {
-            // error handling
-            $error = "Error: " . $stmt->error;
+        // ========== TRANSACTION START ==========
+        mysqli_autocommit($conn, false);
+
+        try {
+            // use prepared statement (prevents sql injection)
+            $stmt = $conn->prepare("UPDATE users SET name=?, email=?, phone=? WHERE id=?");
+            $stmt->bind_param("sssi", $name, $email, $phone, $id);
+            
+            if ($stmt->execute()) {
+                mysqli_commit($conn);
+                header("Location: index.php?msg=User updated successfully!");
+                exit();
+            } else {
+                throw new Exception($stmt->error);
+            }
+            
+        } catch (Exception $e) {
+            // undos/rolls back changes
+            mysqli_rollback($conn);
+            $error = "Error updating user: " . $e->getMessage();
         }
+
+        mysqli_autocommit($conn, true);
+        // ========== TRANSACTION END ==========
     }
 }
 ?>

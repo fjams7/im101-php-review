@@ -24,6 +24,7 @@ $error = ''; // general errors
         - FILTER_VALIDATE_INT - Validates integer
 */
 
+// check if a form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // validate Name (REQUIRED)
     if (empty($_POST['name'])) {
@@ -61,22 +62,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         try {
             // use prepared statement for security (prevents sql injection)
+            // insert sql data
             $stmt = $conn->prepare("INSERT INTO users (name, email, phone) VALUES (?, ?, ?)");
             $stmt->bind_param("sss", $name, $email, $phone);
-            
+            // checks if successful
             if ($stmt->execute()) {
                 mysqli_commit($conn);
                 header("Location: index.php?msg=User created successfully!");
                 exit();
             } else {
+                // display error message
                 throw new Exception($stmt->error);
             }
-        // error handling
+        // error handling. undos/rolls back changes
         } catch (Exception $e) {
             mysqli_rollback($conn);
             $error = "Error creating user: " . $e->getMessage();
         }
         
+        // autosaves to the database
         mysqli_autocommit($conn, true);
         // ========== TRANSACTION END ==========
     }
