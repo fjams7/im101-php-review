@@ -1,3 +1,27 @@
+# PHP CRUD System - User Management
+
+A simple PHP web application for managing users with Create, Read, Update, and Delete (CRUD) operations. This system demonstrates basic PHP form handling, database operations, and security practices.
+
+## 🚀 System Overview
+- **Purpose**: Manage user records (name, email, phone)
+- **Features**: Add new users, view all users, edit user details, delete users
+- **Security**: Input validation, SQL injection prevention, XSS protection
+- **Database**: MySQL with users table
+
+## 📁 Project Structure
+crud_basics/\
+├── CRUD/\
+│ ├── index.php # List all users\
+│ ├── create.php # Add new user\
+│ ├── update.php # Edit user\
+│ └── delete.php # Delete user\
+├── database/\
+│ ├── connection.php # Database connection\
+│ ├── sanitize.php # Input sanitization\
+│ └── database.sql # Database schema\
+└── css/\
+└── style.css # Styling
+
 # PHP CRUD System - Function Reference
 
 ## Database Functions
